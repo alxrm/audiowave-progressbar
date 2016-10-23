@@ -2,21 +2,20 @@ package rm.com.audiogram
 
 import android.os.Handler
 import android.os.Looper
-import android.os.Process
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
  * Created by alex
  */
-val MAIN_THREAD = Handler(Looper.getMainLooper())
-val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor { r ->
-	object : Thread(r) {
-		override fun run() {
-			Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT + Process.THREAD_PRIORITY_LESS_FAVORABLE)
-			super.run()
-		}
-	}
+internal val MAIN_THREAD = Handler(Looper.getMainLooper())
+internal val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor()
+
+internal val Byte.abs: Byte
+	get() = if (this < 0) (-this).toByte() else this
+
+internal fun ByteArray.clear() {
+	for (i in indices) this[i] = 0
 }
 
 internal fun downSampleAsync(data: ByteArray, targetSize: Int, answer: (ByteArray) -> Unit) {
@@ -60,11 +59,4 @@ private fun downSample(data: ByteArray, targetSize: Int): ByteArray {
 	reducedSample.clear()
 
 	return targetSized
-}
-
-val Byte.abs: Byte
-	get() = if (this < 0) (-this).toByte() else this
-
-fun ByteArray.clear() {
-	for (i in indices) this[i] = 0
 }

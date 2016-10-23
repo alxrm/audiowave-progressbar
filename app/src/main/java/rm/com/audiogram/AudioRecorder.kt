@@ -46,18 +46,20 @@ object AudioRecorder {
 				}
 			}
 
+
 			audioRecord.stop()
 			dataOutputStream.close()
 		}
 	}
 
-	fun stopAudioRecord(recorded: (ByteArray) -> Unit) {
+	fun stopAudioRecord(recorded: (ByteArray, Long) -> Unit) {
 		recording = false
 
 		inMediaWorker {
 			val contents = path?.readBytes() ?: byteArrayOf()
+			val duration = (contents.size / 44100 * 1000).toLong()
 
-			inUI { recorded(contents) }
+			inUI { recorded(contents, duration) }
 		}
 	}
 }

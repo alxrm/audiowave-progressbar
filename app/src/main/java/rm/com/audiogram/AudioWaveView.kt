@@ -27,7 +27,7 @@ class AudioWaveView : View {
 
 			downSampleAsync(value, chunksCount) {
 				scaledData = it
-				animateExpanding()
+				animateExpansion()
 			}
 		}
 
@@ -78,7 +78,12 @@ class AudioWaveView : View {
 			redrawData()
 		}
 
-	val chunksCount: Int
+	var expansionDuration: Long = 200
+		set(value) {
+			field = Math.max(200, value)
+		}
+
+	private val chunksCount: Int
 		get() = w / chunkStep
 
 	private val chunkStep: Int
@@ -156,13 +161,13 @@ class AudioWaveView : View {
 		postInvalidate()
 	}
 
-	private fun animateExpanding() {
-		ObjectAnimator.ofFloat(0.0F, 1.0F).apply {
-			duration = 200
-			interpolator = OvershootInterpolator()
-			addUpdateListener { redrawData(factor = it.animatedFraction) }
-		}.start()
-	}
+	private fun animateExpansion() =
+			ObjectAnimator.ofFloat(0.0F, 1.0F).apply {
+				duration = expansionDuration
+				interpolator = OvershootInterpolator()
+				addUpdateListener { redrawData(factor = it.animatedFraction) }
+				start()
+			}
 
 	private fun inflateAttrs(attrs: AttributeSet?) {
 		val resAttrs = context.theme.obtainStyledAttributes(

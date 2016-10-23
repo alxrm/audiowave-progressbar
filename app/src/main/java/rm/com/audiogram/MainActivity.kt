@@ -2,6 +2,7 @@ package rm.com.audiogram
 
 import android.Manifest.permission.RECORD_AUDIO
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -16,6 +17,10 @@ class MainActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
+
+		wave.chunkHeight = dip(200)
+		wave.chunkWidth = 2
+		wave.chunkSpacing = 1
 
 		reqPermissionsOr(WRITE_EXTERNAL_STORAGE, RECORD_AUDIO) { onGranted() }
 	}
@@ -35,15 +40,20 @@ class MainActivity : AppCompatActivity() {
 		}
 
 		stop.setOnClickListener {
-			AudioRecorder.stopAudioRecord {
-				onCompleteRecording(it)
+			AudioRecorder.stopAudioRecord { src, duration ->
+				onCompleteRecording(src, duration)
 			}
 		}
 	}
 
-	private fun onCompleteRecording(res: ByteArray) {
+	private fun onCompleteRecording(res: ByteArray, dur: Long) {
 		wave.visibility = View.VISIBLE
 		wave.unscaledData = res
+
+		ObjectAnimator.ofFloat(wave, "progress", 0.0F, 100.0F).apply {
+			duration = dur
+			start()
+		}
 	}
 
 	private fun onDeny() {

@@ -45,7 +45,7 @@
 		app:minChunkHeight="2dp"
 		app:chunkSpacing="1dp"
 		app:waveColor="@android:color/white"
-		app:progress="100.0"
+		app:progress="0.0"
 		/>
 
 </RelativeLayout>
