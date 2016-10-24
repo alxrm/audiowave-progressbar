@@ -1,4 +1,4 @@
-package rm.com.audiogram
+package rm.com.audiowave
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -23,11 +23,13 @@ class AudioWaveView : View {
 
 	var unscaledData: ByteArray = byteArrayOf()
 		set(value) {
-			scaledData = byteArrayOf()
+			handler.post {
+				scaledData = byteArrayOf()
 
-			downSampleAsync(value, chunksCount) {
-				scaledData = it
-				animateExpansion()
+				downSampleAsync(value, chunksCount) {
+					scaledData = it
+					animateExpansion()
+				}
 			}
 		}
 
@@ -72,15 +74,22 @@ class AudioWaveView : View {
 			postInvalidate()
 		}
 
-	var scaledData: ByteArray = ByteArray(chunksCount)
+	var scaledData: ByteArray = byteArrayOf()
 		set(value) {
-			field = if (value.isEmpty()) ByteArray(chunksCount) else value
-			redrawData()
+			handler.post {
+				field = if (value.size <= chunksCount) {
+					ByteArray(chunksCount).paste(value)
+				} else {
+					value
+				}
+
+				redrawData()
+			}
 		}
 
-	var expansionDuration: Long = 200
+	var expansionDuration: Long = 400
 		set(value) {
-			field = Math.max(200, value)
+			field = Math.max(400, value)
 		}
 
 	private val chunksCount: Int
@@ -122,6 +131,11 @@ class AudioWaveView : View {
 
 		waveBitmap.safeRecycle()
 		waveBitmap = null
+	}
+
+	override fun onVisibilityChanged(changedView: View?, visibility: Int) {
+		super.onVisibilityChanged(changedView, visibility)
+		requestLayout()
 	}
 
 	override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {

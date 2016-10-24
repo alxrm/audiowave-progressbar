@@ -1,4 +1,4 @@
-package rm.com.audiogram
+package rm.com.audiowave
 
 import android.content.Context
 import android.graphics.*
@@ -8,7 +8,6 @@ import android.view.View
  * Created by alex
  */
 fun Context.dip(value: Int): Int = (value * resources.displayMetrics.density).toInt()
-fun Context.dip(value: Float): Int = (value * resources.displayMetrics.density).toInt()
 fun View.dip(value: Int): Int = context.dip(value)
 
 fun smoothPaint(color: Int = Color.WHITE): Paint =

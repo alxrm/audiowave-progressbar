@@ -1,4 +1,4 @@
-package rm.com.audiogram
+package rm.com.audiowave
 
 import android.os.Handler
 import android.os.Looper
@@ -18,6 +18,16 @@ internal fun ByteArray.clear() {
 	for (i in indices) this[i] = 0
 }
 
+internal fun ByteArray.paste(other: ByteArray): ByteArray {
+	if (size == 0) return byteArrayOf()
+
+	return this.apply {
+		forEachIndexed { i, byte ->
+			this[i] = other.getOrElse(i, { this[i].abs })
+		}
+	}
+}
+
 internal fun downSampleAsync(data: ByteArray, targetSize: Int, answer: (ByteArray) -> Unit) {
 	SAMPLER_THREAD.submit {
 		val scaled = downSample(data, targetSize)
@@ -34,11 +44,7 @@ private fun downSample(data: ByteArray, targetSize: Int): ByteArray {
 	var sampleIndex = 0
 	var prevDataIndex = 0
 
-	if (targetSize >= data.size) {
-		return targetSized.apply {
-			data.forEachIndexed { i, byte -> targetSized[i] = byte.abs }
-		}
-	}
+	if (targetSize >= data.size) return targetSized.paste(data)
 
 	data.forEachIndexed { i, byte ->
 		val currentDataIndex = targetSized.size * i / data.size

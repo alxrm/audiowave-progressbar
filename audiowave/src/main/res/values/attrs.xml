@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="AudioWaveView">
+		<attr name="waveColor" format="color" />
+		<attr name="chunkWidth" format="dimension" />
+		<attr name="chunkHeight" format="dimension" />
+		<attr name="minChunkHeight" format="dimension" />
+		<attr name="chunkSpacing" format="dimension" />
+		<attr name="progress" format="float" />
+	</declare-styleable>
+</resources>

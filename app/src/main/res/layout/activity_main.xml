@@ -32,7 +32,7 @@
 		android:text="Stop"
 		/>
 
-	<rm.com.audiogram.AudioWaveView
+	<rm.com.audiowave.AudioWaveView
 		android:id="@+id/wave"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
