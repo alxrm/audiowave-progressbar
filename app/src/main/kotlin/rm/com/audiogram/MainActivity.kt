@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
 		Handler(Looper.getMainLooper()).postDelayed({
 			wave.visibility = View.VISIBLE
-			wave.unscaledData = assets.open("explosion.wav").readBytes()
+			wave.unscaledData = assets.open("laser.mp3").readBytes()
 		}, 1000)
 	}
 }

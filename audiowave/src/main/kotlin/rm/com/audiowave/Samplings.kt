@@ -8,15 +8,15 @@ import java.util.concurrent.Executors
 /**
  * Created by alex
  */
-internal val MAIN_THREAD = Handler(Looper.getMainLooper())
-internal val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor()
+val MAIN_THREAD = Handler(Looper.getMainLooper())
+val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor()
 
 internal val Byte.abs: Byte
-	get() = if (this < 0) (-this).toByte() else this
-
-internal fun ByteArray.clear() {
-	for (i in indices) this[i] = 0
-}
+	get() = when (this) {
+		Byte.MIN_VALUE -> Byte.MAX_VALUE
+		in (Byte.MIN_VALUE + 1..0) -> (-this).toByte()
+		else -> this
+	}
 
 internal fun ByteArray.paste(other: ByteArray): ByteArray {
 	if (size == 0) return byteArrayOf()
@@ -32,37 +32,49 @@ internal fun downSampleAsync(data: ByteArray, targetSize: Int, answer: (ByteArra
 	SAMPLER_THREAD.submit {
 		val scaled = downSample(data, targetSize)
 
-		MAIN_THREAD.post { answer(scaled) }
+		MAIN_THREAD.post {
+			answer(scaled)
+		}
 	}
 }
 
-private fun downSample(data: ByteArray, targetSize: Int): ByteArray {
+internal fun downSample(data: ByteArray, targetSize: Int): ByteArray {
 	val targetSized = ByteArray(targetSize, { 0 })
-	val reducedSampleSize = (data.size / targetSize * 1.2F).toInt()
-	val reducedSample = ByteArray(reducedSampleSize)
+	val reducedSample = mutableListOf<Byte>()
 
-	var sampleIndex = 0
 	var prevDataIndex = 0
 
 	if (targetSize >= data.size) return targetSized.paste(data)
 
 	data.forEachIndexed { i, byte ->
-		val currentDataIndex = targetSized.size * i / data.size
+		val currentDataIndex = targetSize * i / data.size
 
 		if (prevDataIndex == currentDataIndex) {
-			reducedSample[sampleIndex] = byte.abs
+			reducedSample += byte.abs
 		} else {
-			sampleIndex = 0
-			targetSized[currentDataIndex - 1] = reducedSample.average().toByte()
+			targetSized[currentDataIndex - 1] = reducedSample.mostFrequent()
 			reducedSample.clear()
 		}
 
 		prevDataIndex = currentDataIndex
-		sampleIndex += 1
 	}
 
-	targetSized[prevDataIndex] = reducedSample.average().toByte()
-	reducedSample.clear()
+	targetSized[prevDataIndex] = reducedSample.mostFrequent()
 
 	return targetSized
+}
+
+internal fun List<Byte>.mostFrequent(): Byte {
+	val count = ByteArray(128)
+	var index = 0
+
+	forEach {
+		count[it.abs.toInt()]++
+	}
+
+	count.forEachIndexed { i, byte ->
+		if (byte >= count[index]) index = i
+	}
+
+	return index.toByte()
 }

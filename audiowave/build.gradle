@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
 	compileSdkVersion 24
@@ -32,12 +31,4 @@ dependencies {
 
 repositories {
 	mavenCentral()
-}
-
-publish {
-	userOrg = 'alxrm'
-	groupId = 'com.rm'
-	artifactId = 'audiowave'
-	publishVersion = '1.0.2'
-	website = 'https://github.com/alxrm/Audiogram'
 }

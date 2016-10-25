@@ -40,14 +40,19 @@ class AudioWaveView : View {
 			redrawData()
 		}
 
-	var chunkWidth: Int = 0
-		get() = if (field == 0) dip(2) else Math.abs(field)
+	var chunkWidth: Int = dip(2)
 		set(value) {
-			field = value
+			field = Math.abs(value)
 			redrawData()
 		}
 
 	var chunkSpacing: Int = dip(1)
+		set(value) {
+			field = Math.abs(value)
+			redrawData()
+		}
+
+	var chunkRadius: Int = 0
 		set(value) {
 			field = Math.abs(value)
 			redrawData()
@@ -164,12 +169,17 @@ class AudioWaveView : View {
 			val heightDiff = (clampedHeight - minChunkHeight).toFloat()
 			val animatedDiff = (heightDiff * factor).toInt()
 
-			canvas.drawRect(rectOf(
-					left = chunkSpacing / 2 + i * chunkStep,
-					top = centerY - minChunkHeight - animatedDiff,
-					right = chunkSpacing / 2 + i * chunkStep + chunkWidth,
-					bottom = centerY + minChunkHeight + animatedDiff
-			), wavePaint)
+			canvas.drawRoundRect(
+					rectFOf(
+							left = chunkSpacing / 2 + i * chunkStep,
+							top = centerY - minChunkHeight - animatedDiff,
+							right = chunkSpacing / 2 + i * chunkStep + chunkWidth,
+							bottom = centerY + minChunkHeight + animatedDiff
+					),
+					chunkRadius.toFloat(),
+					chunkRadius.toFloat(),
+					wavePaint
+			)
 		}
 
 		postInvalidate()
@@ -196,6 +206,7 @@ class AudioWaveView : View {
 			chunkWidth = getDimensionPixelSize(R.styleable.AudioWaveView_chunkWidth, chunkWidth)
 			chunkSpacing = getDimensionPixelSize(R.styleable.AudioWaveView_chunkSpacing, chunkSpacing)
 			minChunkHeight = getDimensionPixelSize(R.styleable.AudioWaveView_minChunkHeight, minChunkHeight)
+			chunkRadius = getDimensionPixelSize(R.styleable.AudioWaveView_chunkRadius, chunkRadius)
 			waveColor = getColor(R.styleable.AudioWaveView_waveColor, waveColor)
 			progress = getFloat(R.styleable.AudioWaveView_progress, progress)
 			recycle()
