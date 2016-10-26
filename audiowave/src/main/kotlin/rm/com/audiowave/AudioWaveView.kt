@@ -21,16 +21,16 @@ class AudioWaveView : View {
 		inflateAttrs(attrs)
 	}
 
-	var unscaledData: ByteArray = byteArrayOf()
+	var rawData: ByteArray = byteArrayOf()
 		set(value) {
-			handler.post {
+			MAIN_THREAD.postDelayed({
 				scaledData = byteArrayOf()
 
 				downSampleAsync(value, chunksCount) {
 					scaledData = it
 					animateExpansion()
 				}
-			}
+			}, initialDelay)
 		}
 
 	var chunkHeight: Int = 0
@@ -81,7 +81,7 @@ class AudioWaveView : View {
 
 	var scaledData: ByteArray = byteArrayOf()
 		set(value) {
-			handler.post {
+			MAIN_THREAD.postDelayed({
 				field = if (value.size <= chunksCount) {
 					ByteArray(chunksCount).paste(value)
 				} else {
@@ -89,7 +89,7 @@ class AudioWaveView : View {
 				}
 
 				redrawData()
-			}
+			}, initialDelay)
 		}
 
 	var expansionDuration: Long = 400
@@ -108,6 +108,9 @@ class AudioWaveView : View {
 
 	private val progressFactor: Float
 		get() = progress / 100F
+
+	private val initialDelay: Long
+		get() = if (handler == null) 50 else 0
 
 	private var wavePaint = smoothPaint(waveColor.withAlpha(0xAA))
 	private var waveFilledPaint = filterPaint(waveColor)
@@ -138,15 +141,11 @@ class AudioWaveView : View {
 		waveBitmap = null
 	}
 
-	override fun onVisibilityChanged(changedView: View?, visibility: Int) {
-		super.onVisibilityChanged(changedView, visibility)
-		requestLayout()
-	}
-
 	override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+		w = right - left
+		h = bottom - top
+
 		if (changed) {
-			w = right - left
-			h = bottom - top
 
 			if (waveBitmap.fits(w, h)) return
 

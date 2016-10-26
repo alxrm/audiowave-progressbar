@@ -8,8 +8,8 @@ import java.util.concurrent.Executors
 /**
  * Created by alex
  */
-val MAIN_THREAD = Handler(Looper.getMainLooper())
-val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor()
+internal val MAIN_THREAD = Handler(Looper.getMainLooper())
+internal val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor()
 
 internal val Byte.abs: Byte
 	get() = when (this) {
@@ -44,7 +44,9 @@ internal fun downSample(data: ByteArray, targetSize: Int): ByteArray {
 
 	var prevDataIndex = 0
 
-	if (targetSize >= data.size) return targetSized.paste(data)
+	if (targetSize >= data.size) {
+		return targetSized.paste(data)
+	}
 
 	data.forEachIndexed { i, byte ->
 		val currentDataIndex = targetSize * i / data.size
@@ -52,29 +54,14 @@ internal fun downSample(data: ByteArray, targetSize: Int): ByteArray {
 		if (prevDataIndex == currentDataIndex) {
 			reducedSample += byte.abs
 		} else {
-			targetSized[currentDataIndex - 1] = reducedSample.mostFrequent()
+			targetSized[currentDataIndex - 1] = reducedSample.average().toByte()
 			reducedSample.clear()
 		}
 
 		prevDataIndex = currentDataIndex
 	}
 
-	targetSized[prevDataIndex] = reducedSample.mostFrequent()
+	targetSized[prevDataIndex] = reducedSample.average().toByte()
 
 	return targetSized
-}
-
-internal fun List<Byte>.mostFrequent(): Byte {
-	val count = ByteArray(128)
-	var index = 0
-
-	forEach {
-		count[it.abs.toInt()]++
-	}
-
-	count.forEachIndexed { i, byte ->
-		if (byte >= count[index]) index = i
-	}
-
-	return index.toByte()
 }

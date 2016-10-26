@@ -1,17 +1,12 @@
 package rm.com.audiowave
 
-import android.content.Context
 import android.graphics.*
 import android.view.View
 
 /**
  * Created by alex
  */
-internal fun Context.dip(value: Int): Int = (value * resources.displayMetrics.density).toInt()
-internal fun Context.dipF(value: Float): Float = value * resources.displayMetrics.density
-
-internal fun View.dip(value: Int): Int = context.dip(value)
-internal fun View.dipF(value: Float): Float = context.dipF(value)
+internal fun View.dip(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 
 internal fun smoothPaint(color: Int = Color.WHITE): Paint =
 		Paint().apply {

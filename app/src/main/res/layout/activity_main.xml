@@ -9,37 +9,14 @@
 	tools:context="rm.com.audiogram.MainActivity"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<Button
-		android:id="@+id/record"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:clickable="true"
-		android:layout_margin="16dp"
-		android:textSize="16sp"
-		android:text="Rec"
-		/>
-
-	<Button
-		android:id="@+id/stop"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@id/record"
-		android:clickable="true"
-		android:layout_margin="16dp"
-		android:textSize="16sp"
-		android:text="Stop"
-		/>
 
 	<rm.com.audiowave.AudioWaveView
 		android:id="@+id/wave"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="32dp"
 		android:layout_centerHorizontal="true"
 		android:layout_alignParentBottom="true"
-		android:layout_margin="24dp"
-		android:visibility="gone"
+		android:layout_margin="16dp"
 		app:chunkWidth="3dp"
 		app:chunkHeight="24dp"
 		app:minChunkHeight="2dp"
@@ -47,6 +24,17 @@
 		app:chunkRadius="1dp"
 		app:waveColor="@android:color/white"
 		app:progress="0.0"
+		/>
+
+	<Button
+		android:id="@+id/play"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:clickable="true"
+		android:layout_margin="16dp"
+		android:textSize="16sp"
+		android:text="Play"
 		/>
 
 </RelativeLayout>
