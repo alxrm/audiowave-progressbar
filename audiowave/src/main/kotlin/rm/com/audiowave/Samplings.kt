@@ -11,6 +11,47 @@ import java.util.concurrent.Executors
 internal val MAIN_THREAD = Handler(Looper.getMainLooper())
 internal val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor()
 
+object Sampler {
+
+	fun downSampleAsync(data: ByteArray, targetSize: Int, answer: (ByteArray) -> Unit) {
+		SAMPLER_THREAD.submit {
+			val scaled = downSample(data, targetSize)
+
+			MAIN_THREAD.post {
+				answer(scaled)
+			}
+		}
+	}
+
+	fun downSample(data: ByteArray, targetSize: Int): ByteArray {
+		val targetSized = ByteArray(targetSize, { 0 })
+		val reducedSample = mutableListOf<Byte>()
+
+		var prevDataIndex = 0
+
+		if (targetSize >= data.size) {
+			return targetSized.paste(data)
+		}
+
+		data.forEachIndexed { i, byte ->
+			val currentDataIndex = targetSize * i / data.size
+
+			if (prevDataIndex == currentDataIndex) {
+				reducedSample += byte.abs
+			} else {
+				targetSized[currentDataIndex - 1] = reducedSample.average().toByte()
+				reducedSample.clear()
+			}
+
+			prevDataIndex = currentDataIndex
+		}
+
+		targetSized[prevDataIndex] = reducedSample.average().toByte()
+
+		return targetSized
+	}
+}
+
 internal val Byte.abs: Byte
 	get() = when (this) {
 		Byte.MIN_VALUE -> Byte.MAX_VALUE
@@ -26,42 +67,4 @@ internal fun ByteArray.paste(other: ByteArray): ByteArray {
 			this[i] = other.getOrElse(i, { this[i].abs })
 		}
 	}
-}
-
-internal fun downSampleAsync(data: ByteArray, targetSize: Int, answer: (ByteArray) -> Unit) {
-	SAMPLER_THREAD.submit {
-		val scaled = downSample(data, targetSize)
-
-		MAIN_THREAD.post {
-			answer(scaled)
-		}
-	}
-}
-
-internal fun downSample(data: ByteArray, targetSize: Int): ByteArray {
-	val targetSized = ByteArray(targetSize, { 0 })
-	val reducedSample = mutableListOf<Byte>()
-
-	var prevDataIndex = 0
-
-	if (targetSize >= data.size) {
-		return targetSized.paste(data)
-	}
-
-	data.forEachIndexed { i, byte ->
-		val currentDataIndex = targetSize * i / data.size
-
-		if (prevDataIndex == currentDataIndex) {
-			reducedSample += byte.abs
-		} else {
-			targetSized[currentDataIndex - 1] = reducedSample.average().toByte()
-			reducedSample.clear()
-		}
-
-		prevDataIndex = currentDataIndex
-	}
-
-	targetSized[prevDataIndex] = reducedSample.average().toByte()
-
-	return targetSized
 }

@@ -23,8 +23,12 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		wave.rawData = assets.open("explosion.wav").readBytes()
+		play.setOnClickListener {
+			inflateWave()
+		}
+	}
 
-		play.setOnClickListener { progressAnim.start() }
+	fun inflateWave() {
+		wave.setRawData(assets.open("explosion.wav").readBytes()) { progressAnim.start() }
 	}
 }

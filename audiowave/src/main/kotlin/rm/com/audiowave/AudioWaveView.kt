@@ -21,18 +21,6 @@ class AudioWaveView : View {
 		inflateAttrs(attrs)
 	}
 
-	var rawData: ByteArray = byteArrayOf()
-		set(value) {
-			MAIN_THREAD.postDelayed({
-				scaledData = byteArrayOf()
-
-				downSampleAsync(value, chunksCount) {
-					scaledData = it
-					animateExpansion()
-				}
-			}, initialDelay)
-		}
-
 	var chunkHeight: Int = 0
 		get() = if (field == 0) h else Math.abs(field)
 		set(value) {
@@ -141,6 +129,11 @@ class AudioWaveView : View {
 		waveBitmap = null
 	}
 
+	override fun onAttachedToWindow() {
+		super.onAttachedToWindow()
+		scaledData = byteArrayOf()
+	}
+
 	override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
 		w = right - left
 		h = bottom - top
@@ -155,6 +148,16 @@ class AudioWaveView : View {
 			redrawData()
 		}
 		super.onLayout(changed, left, top, right, bottom)
+	}
+
+	fun setRawData(raw: ByteArray, callback: () -> Unit = {}) {
+		MAIN_THREAD.postDelayed({
+			Sampler.downSampleAsync(raw, chunksCount) {
+				scaledData = it
+				animateExpansion()
+				callback()
+			}
+		}, initialDelay)
 	}
 
 	private fun redrawData(canvas: Canvas? = waveBitmap?.inCanvas(), factor: Float = 1.0F) {
