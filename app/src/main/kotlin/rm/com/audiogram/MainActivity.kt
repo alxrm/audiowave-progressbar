@@ -29,6 +29,6 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	fun inflateWave() {
-		wave.setRawData(assets.open("explosion.wav").readBytes()) { progressAnim.start() }
+		wave.setRawData(assets.open("End.mp3").readBytes()) { progressAnim.start() }
 	}
 }
