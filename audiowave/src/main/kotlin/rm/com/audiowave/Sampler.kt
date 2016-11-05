@@ -25,28 +25,28 @@ object Sampler {
 
   fun downSample(data: ByteArray, targetSize: Int): ByteArray {
     val targetSized = ByteArray(targetSize, { 0 })
-    val reducedSample = mutableListOf<Byte>()
-
     var prevDataIndex = 0
+    var sampledPerChunk = 0F
+    var sumPerChunk = 0F
 
     if (targetSize >= data.size) {
       return targetSized.paste(data)
     }
 
-    data.forEachIndexed { i, byte ->
-      val currentDataIndex = targetSize * i / data.size
+    for (index in 0..data.size) {
+      val currentDataIndex = targetSize * index / data.size
 
       if (prevDataIndex == currentDataIndex) {
-        reducedSample += byte.abs
+        sampledPerChunk += 1
+        sumPerChunk += data[index].abs
       } else {
-        targetSized[currentDataIndex - 1] = reducedSample.average().toByte()
-        reducedSample.clear()
+        targetSized[prevDataIndex] = (sumPerChunk / sampledPerChunk).toByte()
+
+        sumPerChunk = 0F
+        sampledPerChunk = 0F
+        prevDataIndex = currentDataIndex
       }
-
-      prevDataIndex = currentDataIndex
     }
-
-    targetSized[prevDataIndex] = reducedSample.average().toByte()
 
     return targetSized
   }
