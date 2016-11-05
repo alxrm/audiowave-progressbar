@@ -41,7 +41,7 @@ dependencies {
 
 ## In code
 
-Settle this wave somewhere in your XML like this:
+Settle the wave somewhere in your XML like this:
 
 ```xml
 	<rm.com.audiowave.AudioWaveView
