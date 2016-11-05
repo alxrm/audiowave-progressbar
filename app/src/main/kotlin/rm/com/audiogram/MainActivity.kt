@@ -9,26 +9,26 @@ import rm.com.audiowave.AudioWaveView
 
 class MainActivity : AppCompatActivity() {
 
-	val wave by lazy { findViewById(R.id.wave) as AudioWaveView }
-	val play by lazy { findViewById(R.id.play) as Button }
+  val wave by lazy { findViewById(R.id.wave) as AudioWaveView }
+  val play by lazy { findViewById(R.id.play) as Button }
 
-	val progressAnim: ObjectAnimator by lazy {
-		ObjectAnimator.ofFloat(wave, "progress", 0F, 100F).apply {
-			interpolator = LinearInterpolator()
-			duration = 1000
-		}
-	}
+  val progressAnim: ObjectAnimator by lazy {
+    ObjectAnimator.ofFloat(wave, "progress", 0F, 100F).apply {
+      interpolator = LinearInterpolator()
+      duration = 1000
+    }
+  }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_main)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
 
-		play.setOnClickListener {
-			inflateWave()
-		}
-	}
+    play.setOnClickListener {
+      inflateWave()
+    }
+  }
 
-	fun inflateWave() {
-		wave.setRawData(assets.open("End.mp3").readBytes()) { progressAnim.start() }
-	}
+  fun inflateWave() {
+    wave.setRawData(assets.open("End.mp3").readBytes()) { progressAnim.start() }
+  }
 }

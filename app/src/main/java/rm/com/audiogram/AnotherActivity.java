@@ -13,7 +13,7 @@ public class AnotherActivity extends Activity {
     setContentView(R.layout.activity_another);
 
     final AudioWaveView waveView = (AudioWaveView) findViewById(R.id.wave);
-    final byte[] data = { 1, 3, 37, 117, 69, 0, 0, 58 };
+    final byte[] data = {1, 3, 37, 117, 69, 0, 0, 58};
 
     waveView.setScaledData(data);
 

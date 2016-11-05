@@ -13,58 +13,58 @@ internal val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor
 
 object Sampler {
 
-	fun downSampleAsync(data: ByteArray, targetSize: Int, answer: (ByteArray) -> Unit) {
-		SAMPLER_THREAD.submit {
-			val scaled = downSample(data, targetSize)
+  fun downSampleAsync(data: ByteArray, targetSize: Int, answer: (ByteArray) -> Unit) {
+    SAMPLER_THREAD.submit {
+      val scaled = downSample(data, targetSize)
 
-			MAIN_THREAD.post {
-				answer(scaled)
-			}
-		}
-	}
+      MAIN_THREAD.post {
+        answer(scaled)
+      }
+    }
+  }
 
-	fun downSample(data: ByteArray, targetSize: Int): ByteArray {
-		val targetSized = ByteArray(targetSize, { 0 })
-		val reducedSample = mutableListOf<Byte>()
+  fun downSample(data: ByteArray, targetSize: Int): ByteArray {
+    val targetSized = ByteArray(targetSize, { 0 })
+    val reducedSample = mutableListOf<Byte>()
 
-		var prevDataIndex = 0
+    var prevDataIndex = 0
 
-		if (targetSize >= data.size) {
-			return targetSized.paste(data)
-		}
+    if (targetSize >= data.size) {
+      return targetSized.paste(data)
+    }
 
-		data.forEachIndexed { i, byte ->
-			val currentDataIndex = targetSize * i / data.size
+    data.forEachIndexed { i, byte ->
+      val currentDataIndex = targetSize * i / data.size
 
-			if (prevDataIndex == currentDataIndex) {
-				reducedSample += byte.abs
-			} else {
-				targetSized[currentDataIndex - 1] = reducedSample.average().toByte()
-				reducedSample.clear()
-			}
+      if (prevDataIndex == currentDataIndex) {
+        reducedSample += byte.abs
+      } else {
+        targetSized[currentDataIndex - 1] = reducedSample.average().toByte()
+        reducedSample.clear()
+      }
 
-			prevDataIndex = currentDataIndex
-		}
+      prevDataIndex = currentDataIndex
+    }
 
-		targetSized[prevDataIndex] = reducedSample.average().toByte()
+    targetSized[prevDataIndex] = reducedSample.average().toByte()
 
-		return targetSized
-	}
+    return targetSized
+  }
 }
 
 internal val Byte.abs: Byte
-	get() = when (this) {
-		Byte.MIN_VALUE -> Byte.MAX_VALUE
-		in (Byte.MIN_VALUE + 1..0) -> (-this).toByte()
-		else -> this
-	}
+  get() = when (this) {
+    Byte.MIN_VALUE -> Byte.MAX_VALUE
+    in (Byte.MIN_VALUE + 1..0) -> (-this).toByte()
+    else -> this
+  }
 
 internal fun ByteArray.paste(other: ByteArray): ByteArray {
-	if (size == 0) return byteArrayOf()
+  if (size == 0) return byteArrayOf()
 
-	return this.apply {
-		forEachIndexed { i, byte ->
-			this[i] = other.getOrElse(i, { this[i].abs })
-		}
-	}
+  return this.apply {
+    forEachIndexed { i, byte ->
+      this[i] = other.getOrElse(i, { this[i].abs })
+    }
+  }
 }
