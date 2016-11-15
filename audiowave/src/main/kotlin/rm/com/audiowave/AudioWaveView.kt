@@ -150,6 +150,7 @@ class AudioWaveView : View {
     super.onLayout(changed, left, top, right, bottom)
   }
 
+  @JvmOverloads
   fun setRawData(raw: ByteArray, callback: () -> Unit = {}) {
     MAIN_THREAD.postDelayed({
       Sampler.downSampleAsync(raw, chunksCount) {
@@ -159,8 +160,6 @@ class AudioWaveView : View {
       }
     }, initialDelay)
   }
-
-  fun setRawData(raw: ByteArray) = setRawData(raw, {})
 
   private fun redrawData(canvas: Canvas? = waveBitmap?.inCanvas(), factor: Float = 1.0F) {
     if (waveBitmap == null || canvas == null) return

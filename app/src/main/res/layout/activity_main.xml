@@ -18,12 +18,11 @@
 		android:layout_alignParentBottom="true"
 		android:layout_margin="16dp"
 		app:chunkWidth="3dp"
-		app:chunkHeight="24dp"
+		app:chunkHeight="32dp"
 		app:minChunkHeight="2dp"
 		app:chunkSpacing="1dp"
 		app:chunkRadius="1dp"
 		app:waveColor="@android:color/white"
-		app:progress="0.0"
 		/>
 
 	<Button
