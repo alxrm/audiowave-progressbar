@@ -41,6 +41,8 @@ internal fun Int.withAlpha(alpha: Int): Int {
   return this and 0x00FFFFFF or (alpha shl 24)
 }
 
+internal fun Float.clamp(min: Float, max: Float) = Math.min(max, Math.max(this, min))
+
 internal fun Bitmap.inCanvas(): Canvas = Canvas(this)
 
 internal fun Bitmap?.safeRecycle() =

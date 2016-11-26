@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.OvershootInterpolator
 
@@ -20,6 +21,14 @@ class AudioWaveView : View {
   constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
     inflateAttrs(attrs)
   }
+
+  var onProgressListener: OnProgressListener? = null
+
+  var onProgressChanged: (Float, Boolean) -> Unit = { progress, byUser -> Unit }
+
+  var onStartTracking: (Float) -> Unit = {}
+
+  var onStopTracking: (Float) -> Unit = {}
 
   var chunkHeight: Int = 0
     get() = if (field == 0) h else Math.abs(field)
@@ -64,6 +73,10 @@ class AudioWaveView : View {
       require(value in 0..100) { "Progress must be in 0..100" }
 
       field = Math.abs(value)
+
+      onProgressListener?.onProgressChanged(field, isTouched)
+      onProgressChanged(field, isTouched)
+
       postInvalidate()
     }
 
@@ -84,6 +97,8 @@ class AudioWaveView : View {
     set(value) {
       field = Math.max(400, value)
     }
+
+  var isTouched = false
 
   private val chunksCount: Int
     get() = w / chunkStep
@@ -148,6 +163,45 @@ class AudioWaveView : View {
       redrawData()
     }
     super.onLayout(changed, left, top, right, bottom)
+  }
+
+  override fun onTouchEvent(event: MotionEvent?): Boolean {
+    event ?: return super.onTouchEvent(event)
+
+    when (event.action) {
+      MotionEvent.ACTION_DOWN -> {
+        isTouched = true
+        progress = event.toProgress()
+
+        // these paired calls look ugly, but we need them for Java
+        onProgressListener?.onStartTracking(progress)
+        onStartTracking(progress)
+
+        return true
+      }
+      MotionEvent.ACTION_MOVE -> {
+        isTouched = true
+        progress = event.toProgress()
+        return true
+      }
+      MotionEvent.ACTION_UP -> {
+        isTouched = false
+        onProgressListener?.onStopTracking(progress)
+        onStopTracking(progress)
+        return false
+      }
+      else -> {
+        isTouched = false
+        return super.onTouchEvent(event)
+      }
+    }
+  }
+
+  fun MotionEvent.toProgress() = this@toProgress.x.clamp(0F, w.toFloat()) / w * 100F
+
+  // Java convenience
+  fun setRawData(raw: ByteArray, callback: OnSamplingListener) {
+    setRawData(raw) { callback.onComplete() }
   }
 
   @JvmOverloads

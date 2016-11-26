@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import rm.com.audiowave.AudioWaveView;
+import rm.com.audiowave.OnSamplingListener;
+import rm.com.audiowave.OnProgressListener;
 
 public class AnotherActivity extends Activity {
 
@@ -17,12 +19,28 @@ public class AnotherActivity extends Activity {
 
     waveView.setScaledData(data);
 
-//    waveView.setRawData(data, new Function0<Unit>() {
-//      @Override
-//      public Unit invoke() {
-//        Log.d("Set raw data", "Callback called");
-//        return null;
-//      }
-//    });
+    waveView.setRawData(data, new OnSamplingListener() {
+      @Override
+      public void onComplete() {
+
+      }
+    });
+
+    waveView.setOnProgressListener(new OnProgressListener() {
+      @Override
+      public void onStartTracking(float progress) {
+
+      }
+
+      @Override
+      public void onStopTracking(float progress) {
+
+      }
+
+      @Override
+      public void onProgressChanged(float progress, boolean byUser) {
+
+      }
+    });
   }
 }

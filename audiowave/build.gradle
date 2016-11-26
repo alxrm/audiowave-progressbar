@@ -3,16 +3,13 @@ apply plugin: 'kotlin-android'
 
 android {
 	compileSdkVersion 25
-	buildToolsVersion "24.0.0"
+	buildToolsVersion "25.0.0"
 
 	defaultConfig {
 		minSdkVersion 15
 		targetSdkVersion 25
 		versionCode 1
 		versionName "1.0"
-
-		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
 	}
 	buildTypes {
 		release {
@@ -26,7 +23,7 @@ android {
 }
 
 dependencies {
-	compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.4'
+	compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.5-2'
 }
 
 repositories {

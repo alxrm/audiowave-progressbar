@@ -3,6 +3,7 @@ package rm.com.audiogram
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.animation.LinearInterpolator
 import android.widget.Button
 import rm.com.audiowave.AudioWaveView
@@ -25,6 +26,10 @@ class MainActivity : AppCompatActivity() {
 
     play.setOnClickListener {
       inflateWave()
+    }
+
+    wave.onStopTracking = {
+      Log.e("wave", "Progress set: $it")
     }
   }
 
