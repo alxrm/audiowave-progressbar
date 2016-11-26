@@ -2,7 +2,7 @@
 [![](https://jitpack.io/v/alxrm/Audiogram.svg)](https://jitpack.io/#alxrm/Audiogram)
 [![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)]()
 
-Super lightweight component to create audiowaves written in Kotlin
+Super lightweight audiowave progressbar written in Kotlin
 
 
 
@@ -24,7 +24,7 @@ allprojects {
 Add the dependency:
 ```Groovy
 dependencies {
-    compile 'com.github.alxrm:Audiogram:0.5'
+    compile 'com.github.alxrm:Audiogram:0.6'
 }
 ```
 
@@ -58,9 +58,9 @@ Settle the wave somewhere in your XML like this:
 		/>
 ```
 
-####There are 2 ways you can work with this component:
+## API
 
-* Set raw byte array asynchronously 
+Set raw byte array asynchronously 
 
 ```java
     
@@ -68,15 +68,37 @@ Settle the wave somewhere in your XML like this:
     setRawData(byte[] data);
     
     // you also have the ability to listen, when does the downsampling complete
-    setRawData(byte[] data, Function0<Unit> callback);
+    setRawData(byte[] data, OnSamplingListener callback);
 ```
 
-* In case you have scaled byte array you want to draw
+In case you have scaled byte array you want to draw
 
 ```java
     
     // instantly redraws the wave without async downsampling process
     setScaledData(byte[] scaledData);
+```
+
+Now you can use it like a `Seekbar`, it reacts on touches, just attach listener
+
+```java
+    setOnProgressListener(OnProgressListener listener);
+```
+
+This listener has 3 methods like a built-in `Seekbar`
+
+```java
+	void onStartTracking(float progress) {
+		// invokes when user touches the view
+   	}
+	
+   	void onStopTracking(float progress) {
+		// invokes when user releases the touch
+   	}
+	
+   	void onProgressChanged(float progress, boolean byUser) {
+		// invokes every time the progress's been changed
+   	}
 ```
 
 ## Contribution
