@@ -1,5 +1,5 @@
 # Audiogram
-[![](https://jitpack.io/v/alxrm/Audiogram.svg)](https://jitpack.io/#alxrm/Audiogram)
+[![](https://jitpack.io/v/alxrm/audiowave-progressbar.svg)](https://jitpack.io/#alxrm/audiowave-progressbar)
 [![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)]()
 
 Super lightweight audiowave progressbar written in Kotlin
