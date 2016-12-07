@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-	android:id="@+id/activity_another"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:paddingBottom="@dimen/activity_vertical_margin"
-	android:paddingLeft="@dimen/activity_horizontal_margin"
-	android:paddingRight="@dimen/activity_horizontal_margin"
-	android:paddingTop="@dimen/activity_vertical_margin"
-	tools:context="rm.com.audiogram.AnotherActivity"
-	xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_another"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="rm.com.audiogram.AnotherActivity"
+    >
 
-	<rm.com.audiowave.AudioWaveView
-		android:id="@+id/wave"
-		android:layout_width="match_parent"
-		android:layout_height="32dp"
-		android:layout_centerInParent="true"
-		android:layout_margin="16dp"
-		app:chunkWidth="3dp"
-		app:chunkHeight="24dp"
-		app:minChunkHeight="2dp"
-		app:chunkSpacing="1dp"
-		app:chunkRadius="1dp"
-		app:waveColor="@android:color/black"
-		app:progress="0.0"
-		/>
+  <rm.com.audiowave.AudioWaveView
+      android:id="@+id/wave"
+      android:layout_width="match_parent"
+      android:layout_height="32dp"
+      android:layout_centerInParent="true"
+      android:layout_margin="16dp"
+      app:chunkHeight="24dp"
+      app:chunkRadius="1dp"
+      app:chunkSpacing="1dp"
+      app:chunkWidth="3dp"
+      app:minChunkHeight="2dp"
+      app:progress="0.0"
+      app:waveColor="@android:color/black"
+      />
 
 </RelativeLayout>

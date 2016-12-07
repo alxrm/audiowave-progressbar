@@ -2,6 +2,7 @@ package rm.com.audiowave
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -24,7 +25,10 @@ object Sampler {
   }
 
   fun downSample(data: ByteArray, targetSize: Int): ByteArray {
-    val targetSized = ByteArray(targetSize, { 0 })
+    val targetSized = ByteArray(targetSize)
+    val chunkSize = data.size / targetSize
+    val chunkStep = Math.max(Math.floor((chunkSize / 10.0)), 1.0).toInt()
+
     var prevDataIndex = 0
     var sampledPerChunk = 0F
     var sumPerChunk = 0F
@@ -33,7 +37,7 @@ object Sampler {
       return targetSized.paste(data)
     }
 
-    for (index in 0..data.size) {
+    for (index in 0..data.size step chunkStep) {
       val currentDataIndex = targetSize * index / data.size
 
       if (prevDataIndex == currentDataIndex) {

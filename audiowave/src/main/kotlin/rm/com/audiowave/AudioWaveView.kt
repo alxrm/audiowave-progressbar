@@ -18,7 +18,8 @@ class AudioWaveView : View {
     inflateAttrs(attrs)
   }
 
-  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs,
+      defStyleAttr) {
     inflateAttrs(attrs)
   }
 
@@ -262,7 +263,8 @@ class AudioWaveView : View {
       chunkHeight = getDimensionPixelSize(R.styleable.AudioWaveView_chunkHeight, chunkHeight)
       chunkWidth = getDimensionPixelSize(R.styleable.AudioWaveView_chunkWidth, chunkWidth)
       chunkSpacing = getDimensionPixelSize(R.styleable.AudioWaveView_chunkSpacing, chunkSpacing)
-      minChunkHeight = getDimensionPixelSize(R.styleable.AudioWaveView_minChunkHeight, minChunkHeight)
+      minChunkHeight = getDimensionPixelSize(R.styleable.AudioWaveView_minChunkHeight,
+          minChunkHeight)
       chunkRadius = getDimensionPixelSize(R.styleable.AudioWaveView_chunkRadius, chunkRadius)
       waveColor = getColor(R.styleable.AudioWaveView_waveColor, waveColor)
       progress = getFloat(R.styleable.AudioWaveView_progress, progress)
