@@ -1,5 +1,5 @@
 # Audiogram
-[![](https://jitpack.io/v/alxrm/Audiogram.svg)](https://jitpack.io/#alxrm/Audiogram)
+[![](https://jitpack.io/v/alxrm/audiowave-progressbar.svg)](https://jitpack.io/#alxrm/audiowave-progressbar)
 [![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)]()
 
 Super lightweight audiowave progressbar written in Kotlin
@@ -24,7 +24,7 @@ allprojects {
 Add the dependency:
 ```Groovy
 dependencies {
-    compile 'com.github.alxrm:audiowave-progressbar:0.6'
+    compile 'com.github.alxrm:audiowave-progressbar:0.7'
 }
 ```
 
