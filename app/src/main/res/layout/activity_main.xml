@@ -10,7 +10,6 @@
     tools:context="rm.com.audiogram.MainActivity"
     >
 
-
   <rm.com.audiowave.AudioWaveView
       android:id="@+id/wave"
       android:layout_width="match_parent"

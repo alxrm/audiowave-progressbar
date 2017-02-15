@@ -1,6 +1,6 @@
 package rm.com.audiowave
 
-import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -66,7 +66,7 @@ class AudioWaveView : View {
     set(value) {
       wavePaint = smoothPaint(value.withAlpha(0xAA))
       waveFilledPaint = filterPaint(value)
-      postInvalidate()
+      invalidate()
     }
 
   var progress: Float = 0F
@@ -78,26 +78,27 @@ class AudioWaveView : View {
       onProgressListener?.onProgressChanged(field, isTouched)
       onProgressChanged(field, isTouched)
 
-      postInvalidate()
+      invalidate()
     }
 
   var scaledData: ByteArray = byteArrayOf()
     set(value) {
-      MAIN_THREAD.postDelayed({
-        field = if (value.size <= chunksCount) {
-          ByteArray(chunksCount).paste(value)
-        } else {
-          value
-        }
+      field = if (value.size <= chunksCount) {
+        ByteArray(chunksCount).paste(value)
+      } else {
+        value
+      }
 
-        redrawData()
-      }, initialDelay)
+      redrawData()
     }
 
   var expansionDuration: Long = 400
     set(value) {
       field = Math.max(400, value)
+      expansionAnimator.duration = field
     }
+
+  var isExpansionAnimated: Boolean = true
 
   var isTouched = false
 
@@ -115,6 +116,14 @@ class AudioWaveView : View {
 
   private val initialDelay: Long
     get() = if (handler == null) 50 else 0
+
+  private val expansionAnimator = ValueAnimator.ofFloat(0.0F, 1.0F).apply {
+    duration = expansionDuration
+    interpolator = OvershootInterpolator()
+    addUpdateListener {
+      redrawData(factor = it.animatedFraction)
+    }
+  }
 
   private var wavePaint = smoothPaint(waveColor.withAlpha(0xAA))
   private var waveFilledPaint = filterPaint(waveColor)
@@ -138,32 +147,19 @@ class AudioWaveView : View {
     }
   }
 
-  override fun onDetachedFromWindow() {
-    super.onDetachedFromWindow()
-
-    waveBitmap.safeRecycle()
-    waveBitmap = null
-  }
-
-  override fun onAttachedToWindow() {
-    super.onAttachedToWindow()
-    scaledData = byteArrayOf()
-  }
-
   override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
     w = right - left
     h = bottom - top
 
+    if (waveBitmap.fits(w, h)) {
+      return
+    }
+
     if (changed) {
-
-      if (waveBitmap.fits(w, h)) return
-
       waveBitmap.safeRecycle()
       waveBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-
       redrawData()
     }
-    super.onLayout(changed, left, top, right, bottom)
   }
 
   override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -198,8 +194,6 @@ class AudioWaveView : View {
     }
   }
 
-  fun MotionEvent.toProgress() = this@toProgress.x.clamp(0F, w.toFloat()) / w * 100F
-
   // Java convenience
   fun setRawData(raw: ByteArray, callback: OnSamplingListener) {
     setRawData(raw) { callback.onComplete() }
@@ -207,14 +201,20 @@ class AudioWaveView : View {
 
   @JvmOverloads
   fun setRawData(raw: ByteArray, callback: () -> Unit = {}) {
-    MAIN_THREAD.postDelayed({
+    MAIN_THREAD_HANDLER.postDelayed({
       Sampler.downSampleAsync(raw, chunksCount) {
         scaledData = it
-        animateExpansion()
         callback()
+
+        when {
+          isExpansionAnimated -> animateExpansion()
+          else -> redrawData(factor = 1F)
+        }
       }
     }, initialDelay)
   }
+
+  private fun MotionEvent.toProgress() = this@toProgress.x.clamp(0F, w.toFloat()) / w * 100F
 
   private fun redrawData(canvas: Canvas? = waveBitmap?.inCanvas(), factor: Float = 1.0F) {
     if (waveBitmap == null || canvas == null) return
@@ -240,16 +240,16 @@ class AudioWaveView : View {
       )
     }
 
-    postInvalidate()
+    invalidate()
   }
 
-  private fun animateExpansion() =
-      ObjectAnimator.ofFloat(0.0F, 1.0F).apply {
-        duration = expansionDuration
-        interpolator = OvershootInterpolator()
-        addUpdateListener { redrawData(factor = it.animatedFraction) }
-        start()
-      }
+  private fun animateExpansion() {
+    ANIMATOR_HANDLER.removeCallbacksAndMessages(null)
+    ANIMATOR_HANDLER.postDelayed({
+      expansionAnimator.start()
+    }, 100)
+//    expansionAnimator.start()
+  }
 
   private fun inflateAttrs(attrs: AttributeSet?) {
     val resAttrs = context.theme.obtainStyledAttributes(
@@ -262,12 +262,15 @@ class AudioWaveView : View {
     with(resAttrs) {
       chunkHeight = getDimensionPixelSize(R.styleable.AudioWaveView_chunkHeight, chunkHeight)
       chunkWidth = getDimensionPixelSize(R.styleable.AudioWaveView_chunkWidth, chunkWidth)
-      chunkSpacing = getDimensionPixelSize(R.styleable.AudioWaveView_chunkSpacing, chunkSpacing)
+      chunkSpacing = getDimensionPixelSize(R.styleable.AudioWaveView_chunkSpacing,
+          chunkSpacing)
       minChunkHeight = getDimensionPixelSize(R.styleable.AudioWaveView_minChunkHeight,
           minChunkHeight)
       chunkRadius = getDimensionPixelSize(R.styleable.AudioWaveView_chunkRadius, chunkRadius)
       waveColor = getColor(R.styleable.AudioWaveView_waveColor, waveColor)
       progress = getFloat(R.styleable.AudioWaveView_progress, progress)
+      isExpansionAnimated = getBoolean(R.styleable.AudioWaveView_animateExpansion,
+          isExpansionAnimated)
       recycle()
     }
   }

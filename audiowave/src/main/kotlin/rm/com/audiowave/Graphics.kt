@@ -12,6 +12,8 @@ import android.view.View
 /**
  * Created by alex
  */
+
+
 internal fun View.dip(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 
 internal fun smoothPaint(color: Int = Color.WHITE): Paint =

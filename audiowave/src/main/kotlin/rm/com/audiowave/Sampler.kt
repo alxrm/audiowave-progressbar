@@ -2,14 +2,14 @@ package rm.com.audiowave
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
  * Created by alex
  */
-internal val MAIN_THREAD = Handler(Looper.getMainLooper())
+internal val MAIN_THREAD_HANDLER = Handler(Looper.getMainLooper())
+internal val ANIMATOR_HANDLER = Handler(Looper.getMainLooper())
 internal val SAMPLER_THREAD: ExecutorService = Executors.newSingleThreadExecutor()
 
 object Sampler {
@@ -18,7 +18,7 @@ object Sampler {
     SAMPLER_THREAD.submit {
       val scaled = downSample(data, targetSize)
 
-      MAIN_THREAD.post {
+      MAIN_THREAD_HANDLER.post {
         answer(scaled)
       }
     }
