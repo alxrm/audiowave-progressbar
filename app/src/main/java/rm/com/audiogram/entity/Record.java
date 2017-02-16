@@ -19,7 +19,7 @@ public final class Record {
     final Random rnd = new Random();
 
     for (int i = 0; i < size; i++) {
-      records.add(generateDummyItem(40000, rnd));
+      records.add(generateDummyItem(10000, rnd));
     }
 
     return records;
@@ -29,7 +29,7 @@ public final class Record {
     final byte[] raw = new byte[length];
 
     for (int i = 0; i < length; i++) {
-      raw[i] = (byte) (rnd.nextInt(255) - 128);
+      raw[i] = (byte) (rnd.nextInt(127));
     }
 
     return new Record(raw);

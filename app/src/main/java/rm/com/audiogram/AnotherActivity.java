@@ -7,7 +7,7 @@ import rm.com.audiowave.AudioWaveView;
 import rm.com.audiowave.OnSamplingListener;
 import rm.com.audiowave.OnProgressListener;
 
-public class AnotherActivity extends Activity {
+public final class AnotherActivity extends Activity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

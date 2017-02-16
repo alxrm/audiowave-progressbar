@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
 
   val wave by lazy { findViewById(R.id.wave) as AudioWaveView }
   val play by lazy { findViewById(R.id.play) as Button }
+  val list by lazy { findViewById(R.id.list) as Button }
 
   val progressAnim: ObjectAnimator by lazy {
     ObjectAnimator.ofFloat(wave, "progress", 0F, 100F).apply {
@@ -25,10 +26,12 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    startActivity(Intent(this, RecordListActivity::class.java))
-
     play.setOnClickListener {
       inflateWave()
+    }
+
+    list.setOnClickListener {
+      startActivity(Intent(this, RecordListActivity::class.java))
     }
 
     wave.onStopTracking = {

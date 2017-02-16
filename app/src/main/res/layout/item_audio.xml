@@ -8,10 +8,11 @@
 
   <ImageView
       android:id="@+id/audio_button_play"
-      android:layout_width="48dp"
-      android:layout_height="48dp"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
       android:layout_centerVertical="true"
-      android:layout_margin="8dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginStart="16dp"
       android:background="?attr/selectableItemBackgroundBorderless"
       android:clickable="true"
       android:contentDescription="Audio play button"
@@ -24,15 +25,15 @@
       android:layout_width="match_parent"
       android:layout_height="32dp"
       android:layout_centerVertical="true"
-      android:layout_margin="8dp"
+      android:layout_margin="16dp"
       android:layout_toEndOf="@id/audio_button_play"
       android:layout_toRightOf="@id/audio_button_play"
-      app:chunkHeight="24dp"
+      app:animateExpansion="false"
+      app:chunkHeight="16dp"
       app:chunkRadius="1dp"
       app:chunkSpacing="1dp"
       app:chunkWidth="3dp"
       app:minChunkHeight="2dp"
-      app:animateExpansion="true"
       app:waveColor="@color/colorPrimaryDark"
       />
 

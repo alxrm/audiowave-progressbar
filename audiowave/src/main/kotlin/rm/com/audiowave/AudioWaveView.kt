@@ -12,14 +12,18 @@ import android.view.animation.OvershootInterpolator
 
 class AudioWaveView : View {
 
-  constructor(context: Context?) : super(context)
+  constructor(context: Context?) : super(context) {
+    setWillNotDraw(false)
+  }
 
   constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    setWillNotDraw(false)
     inflateAttrs(attrs)
   }
 
   constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs,
       defStyleAttr) {
+    setWillNotDraw(false)
     inflateAttrs(attrs)
   }
 
@@ -66,7 +70,7 @@ class AudioWaveView : View {
     set(value) {
       wavePaint = smoothPaint(value.withAlpha(0xAA))
       waveFilledPaint = filterPaint(value)
-      invalidate()
+      postInvalidate()
     }
 
   var progress: Float = 0F
@@ -78,7 +82,7 @@ class AudioWaveView : View {
       onProgressListener?.onProgressChanged(field, isTouched)
       onProgressChanged(field, isTouched)
 
-      invalidate()
+      postInvalidate()
     }
 
   var scaledData: ByteArray = byteArrayOf()
@@ -114,8 +118,7 @@ class AudioWaveView : View {
   private val progressFactor: Float
     get() = progress / 100F
 
-  private val initialDelay: Long
-    get() = if (handler == null) 50 else 0
+  private val initialDelay: Long = 50
 
   private val expansionAnimator = ValueAnimator.ofFloat(0.0F, 1.0F).apply {
     duration = expansionDuration
@@ -158,7 +161,12 @@ class AudioWaveView : View {
     if (changed) {
       waveBitmap.safeRecycle()
       waveBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-      redrawData()
+
+      // absolutely ridiculous hack to draw wave in RecyclerView items
+      scaledData = when (scaledData.size) {
+        0 -> byteArrayOf()
+        else -> scaledData
+      }
     }
   }
 
@@ -201,14 +209,13 @@ class AudioWaveView : View {
 
   @JvmOverloads
   fun setRawData(raw: ByteArray, callback: () -> Unit = {}) {
-    MAIN_THREAD_HANDLER.postDelayed({
+    MAIN_THREAD.postDelayed({
       Sampler.downSampleAsync(raw, chunksCount) {
         scaledData = it
         callback()
 
-        when {
-          isExpansionAnimated -> animateExpansion()
-          else -> redrawData(factor = 1F)
+        if (isExpansionAnimated) {
+          animateExpansion()
         }
       }
     }, initialDelay)
@@ -240,15 +247,11 @@ class AudioWaveView : View {
       )
     }
 
-    invalidate()
+    postInvalidate()
   }
 
   private fun animateExpansion() {
-    ANIMATOR_HANDLER.removeCallbacksAndMessages(null)
-    ANIMATOR_HANDLER.postDelayed({
-      expansionAnimator.start()
-    }, 100)
-//    expansionAnimator.start()
+    expansionAnimator.start()
   }
 
   private fun inflateAttrs(attrs: AttributeSet?) {
