@@ -13,7 +13,7 @@ import rm.com.audiowave.AudioWaveView;
  * Created by alex
  */
 
-public class RecordHolder extends RecyclerView.ViewHolder {
+public final class RecordHolder extends RecyclerView.ViewHolder {
 
   @BindView(R.id.audio_button_play) ImageView play;
   @BindView(R.id.audio_wave) AudioWaveView wave;
