@@ -24,7 +24,7 @@ allprojects {
 Add the dependency:
 ```Groovy
 dependencies {
-    compile 'com.github.alxrm:audiowave-progressbar:0.7'
+    compile 'com.github.alxrm:audiowave-progressbar:0.8'
 }
 ```
 
@@ -38,6 +38,9 @@ dependencies {
 |chunkSpacing|dimension|spacing between chunks|
 |chunkRadius|dimension|how much corners of every chunk will be rounded|
 |progress|float|should be 0..100, it's float so you can easily animate this|
+|animateExpansion|boolean|toggle the animated expansion|
+
+__Note: If you are going to place this in a RecyclerView item, you have to set `animateExpansion` to `false`, otherwise you'll see an incredibly laggy scroll (check out the example)__
 
 ## In code
 
@@ -49,6 +52,7 @@ Settle the wave somewhere in your XML like this:
 		android:layout_width="match_parent"
 		android:layout_height="32dp"
 		android:layout_margin="16dp"
+		app:animateExpansion="false"
 		app:chunkWidth="3dp"
 		app:chunkHeight="24dp"
 		app:minChunkHeight="2dp"
