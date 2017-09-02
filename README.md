@@ -24,7 +24,7 @@ allprojects {
 Add the dependency:
 ```Groovy
 dependencies {
-    compile 'com.github.alxrm:audiowave-progressbar:0.8'
+    compile 'com.github.alxrm:audiowave-progressbar:0.9'
 }
 ```
 

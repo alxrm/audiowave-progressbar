@@ -28,7 +28,7 @@ dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   compile "com.android.support:recyclerview-v7:25.3.1"
   compile 'com.android.support:appcompat-v7:25.3.1'
-//  compile 'com.github.alxrm:audiowave-progressbar:0.8'
+//  compile 'com.github.alxrm:audiowave-progressbar:0.9'
 
   compile "com.jakewharton:butterknife:8.5.1"
   compile "com.jakewharton:butterknife-compiler:8.5.1"
