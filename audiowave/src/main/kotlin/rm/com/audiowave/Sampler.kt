@@ -37,7 +37,7 @@ object Sampler {
     }
 
     for (index in 0..data.size step chunkStep) {
-      val currentDataIndex = targetSize * index / data.size
+      val currentDataIndex = (targetSize * index.toLong() / data.size).toInt()
 
       if (prevDataIndex == currentDataIndex) {
         sampledPerChunk += 1
