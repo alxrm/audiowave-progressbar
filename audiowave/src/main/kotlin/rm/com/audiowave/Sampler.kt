@@ -66,7 +66,7 @@ internal fun ByteArray.paste(other: ByteArray): ByteArray {
   if (size == 0) return byteArrayOf()
 
   return this.apply {
-    forEachIndexed { i, byte ->
+    forEachIndexed { i, _ ->
       this[i] = other.getOrElse(i, { this[i].abs })
     }
   }

@@ -75,7 +75,7 @@ Set raw byte array asynchronously
     setRawData(byte[] data, OnSamplingListener callback);
 ```
 
-In case you have an scaled byte array you want to draw, as in, an array whose size is the amount of chunks to draw
+In case you have a scaled byte array you want to draw, i. e. an array whose size is the amount of chunks to draw
 
 
 ```java
