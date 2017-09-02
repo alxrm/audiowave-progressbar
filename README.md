@@ -9,7 +9,7 @@ Super lightweight audiowave progressbar written in Kotlin
 <img src="imgs/wave.gif"/>
 
 
-##Getting started
+## Getting started
 
 Add to your root build.gradle:
 ```Groovy
