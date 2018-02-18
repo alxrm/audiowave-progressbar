@@ -9,7 +9,7 @@ Super lightweight audiowave progressbar written in Kotlin
 <img src="imgs/wave.gif"/>
 
 
-##Getting started
+## Getting started
 
 Add to your root build.gradle:
 ```Groovy
@@ -108,7 +108,7 @@ This listener has 3 methods like a built-in `Seekbar`
 
 ## Contribution
 
-There are some features(like seeking) I am about to implement, but a little bit later. 
+There are some features(like better precision) I am about to implement, but a little bit later. 
 If you'd like to help, you are always free to send pull requests or issues if you only want to suggest something 
 
 **Note:** All your pull requests should be written in kotlin
