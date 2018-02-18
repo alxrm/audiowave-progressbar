@@ -24,7 +24,7 @@ allprojects {
 Add the dependency:
 ```Groovy
 dependencies {
-    compile 'com.github.alxrm:audiowave-progressbar:0.9'
+    compile 'com.github.alxrm:audiowave-progressbar:0.9.1'
 }
 ```
 
@@ -47,19 +47,19 @@ __Note: If you are going to place this in a RecyclerView item, you have to set `
 Settle the wave somewhere in your XML like this:
 
 ```xml
-	<rm.com.audiowave.AudioWaveView
-		android:id="@+id/wave"
-		android:layout_width="match_parent"
-		android:layout_height="32dp"
-		android:layout_margin="16dp"
-		app:animateExpansion="false"
-		app:chunkWidth="3dp"
-		app:chunkHeight="24dp"
-		app:minChunkHeight="2dp"
-		app:chunkSpacing="1dp"
-		app:chunkRadius="1dp"
-		app:waveColor="@android:color/white"
-		/>
+<rm.com.audiowave.AudioWaveView
+    android:id="@+id/wave"
+    android:layout_width="match_parent"
+    android:layout_height="32dp"
+    android:layout_margin="16dp"
+    app:animateExpansion="false"
+    app:chunkWidth="3dp"
+    app:chunkHeight="24dp"
+    app:minChunkHeight="2dp"
+    app:chunkSpacing="1dp"
+    app:chunkRadius="1dp"
+    app:waveColor="@android:color/white"
+    />
 ```
 
 ## API
@@ -67,43 +67,63 @@ Settle the wave somewhere in your XML like this:
 Set raw byte array asynchronously 
 
 ```java
-    
-    // does downsampling in O(N) and shows the animation you see in a gif above (the inflation-like one)
-    setRawData(byte[] data);
-    
-    // you also have the ability to listen, when does the downsampling complete
-    setRawData(byte[] data, OnSamplingListener callback);
+// does downsampling in O(N) and shows the animation you see in a gif above (the inflation-like one)
+setRawData(byte[] data);
+
+// you also have the ability to listen, when does the downsampling complete
+setRawData(byte[] data, OnSamplingListener callback);
 ```
 
 In case you have a scaled byte array you want to draw, i. e. an array whose size is the amount of chunks to draw
 
 
 ```java
-    
-    // instantly redraws the wave without async downsampling process
-    setScaledData(byte[] scaledData);
+// instantly redraws the wave without async downsampling process
+setScaledData(byte[] scaledData);
 ```
 
-Now you can use it like a `Seekbar`, it reacts on touches, just attach listener
+You can use it like a `Seekbar`, it reacts on touches, just attach listener
 
 ```java
-    setOnProgressListener(OnProgressListener listener);
+wave.setOnProgressListener(OnProgressListener listener);
+```
+
+__Note:__ that `setOnProgressListener` is a Java style API and with Kotlin you have to set it like this:
+
+```kotlin
+wave.onProgressListener = object : OnProgressListener {...}
 ```
 
 This listener has 3 methods like a built-in `Seekbar`
 
 ```java
-	void onStartTracking(float progress) {
-		// invokes when user touches the view
-   	}
-	
-   	void onStopTracking(float progress) {
-		// invokes when user releases the touch
-   	}
-	
-   	void onProgressChanged(float progress, boolean byUser) {
-		// invokes every time the progress's been changed
-   	}
+void onStartTracking(float progress) {
+  // invokes when user touches the view
+}
+
+void onStopTracking(float progress) {
+  // invokes when user releases the touch
+}
+
+void onProgressChanged(float progress, boolean byUser) {
+  // invokes every time the progress's been changed
+}
+```
+
+__Kotlin__ users can listen `Seekbar` event in a more convenient and clean way with __properties__:
+
+```kotlin
+wave.onStopTracking = {
+  Log.d("wave", "Progress set: $it")
+}
+
+wave.onStartTracking = {
+  Log.d("wave", "Started tracking from: $it")
+}
+
+wave.onProgressChanged = {progress, byUser ->
+  Log.d("wave", "Progress set: $progress, and it's $byUser that user did this")
+}
 ```
 
 ## Contribution
