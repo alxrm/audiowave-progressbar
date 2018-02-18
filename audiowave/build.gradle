@@ -2,14 +2,14 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-	compileSdkVersion 25
-	buildToolsVersion "25.0.2"
+	compileSdkVersion 27
+	buildToolsVersion "27.0.3"
 
 	defaultConfig {
 		minSdkVersion 15
-		targetSdkVersion 25
+		targetSdkVersion 27
 		versionCode 1
-		versionName "0.9"
+		versionName "0.9.1"
 	}
 	buildTypes {
 		release {
@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 repositories {

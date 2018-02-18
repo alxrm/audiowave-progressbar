@@ -1,6 +1,7 @@
 package rm.com.audiowave
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -29,7 +30,7 @@ class AudioWaveView : View {
 
   var onProgressListener: OnProgressListener? = null
 
-  var onProgressChanged: (Float, Boolean) -> Unit = { progress, byUser -> Unit }
+  var onProgressChanged: (Float, Boolean) -> Unit = { _, _ -> Unit }
 
   var onStartTracking: (Float) -> Unit = {}
 
@@ -150,6 +151,9 @@ class AudioWaveView : View {
     }
   }
 
+  // suppressed here since we allocate only once,
+  // when the wave bounds have been just calculated(it happens once)
+  @SuppressLint("DrawAllocation")
   override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
     w = right - left
     h = bottom - top
