@@ -31,20 +31,29 @@
       android:layout_height="wrap_content"
       android:layout_centerHorizontal="true"
       android:layout_margin="16dp"
-      android:clickable="true"
       android:text="Play"
       android:textSize="16sp"
       />
 
   <Button
-      android:id="@+id/list"
+      android:id="@+id/list_java"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_below="@id/play"
       android:layout_centerHorizontal="true"
       android:layout_margin="16dp"
-      android:clickable="true"
-      android:text="List"
+      android:text="List java"
+      android:textSize="16sp"
+      />
+
+  <Button
+      android:id="@+id/simple_java"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/list_java"
+      android:layout_centerHorizontal="true"
+      android:layout_margin="16dp"
+      android:text="Simple java"
       android:textSize="16sp"
       />
 
