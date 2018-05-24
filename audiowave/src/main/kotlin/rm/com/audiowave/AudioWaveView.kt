@@ -71,7 +71,7 @@ class AudioWaveView : View {
     set(value) {
       wavePaint = smoothPaint(value.withAlpha(0xAA))
       waveFilledPaint = filterPaint(value)
-      postInvalidate()
+      redrawData()
     }
 
   var progress: Float = 0F
@@ -104,6 +104,8 @@ class AudioWaveView : View {
     }
 
   var isExpansionAnimated: Boolean = true
+
+  var isTouchable = true
 
   var isTouched = false
     private set
@@ -175,8 +177,13 @@ class AudioWaveView : View {
     }
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent?): Boolean {
     event ?: return super.onTouchEvent(event)
+
+    if (!isTouchable || !isEnabled) {
+      return false
+    }
 
     when (event.action) {
       MotionEvent.ACTION_DOWN -> {
@@ -275,6 +282,7 @@ class AudioWaveView : View {
       minChunkHeight = getDimensionPixelSize(R.styleable.AudioWaveView_minChunkHeight,
           minChunkHeight)
       chunkRadius = getDimensionPixelSize(R.styleable.AudioWaveView_chunkRadius, chunkRadius)
+      isTouchable = getBoolean(R.styleable.AudioWaveView_touchable, isTouchable)
       waveColor = getColor(R.styleable.AudioWaveView_waveColor, waveColor)
       progress = getFloat(R.styleable.AudioWaveView_progress, progress)
       isExpansionAnimated = getBoolean(R.styleable.AudioWaveView_animateExpansion,

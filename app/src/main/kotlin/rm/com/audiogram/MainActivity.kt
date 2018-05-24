@@ -3,6 +3,7 @@ package rm.com.audiogram
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.animation.LinearInterpolator
@@ -41,6 +42,11 @@ class MainActivity : AppCompatActivity() {
 
     wave.onProgressChanged = { progress, byUser ->
       Log.e("wave", "Progress set: $progress, and it's $byUser that user did this")
+
+      if (progress == 100F && !byUser) {
+        wave.waveColor = ContextCompat.getColor(this, R.color.colorAccent)
+        wave.isTouchable = true
+      }
     }
 
     wave.onStartTracking = {

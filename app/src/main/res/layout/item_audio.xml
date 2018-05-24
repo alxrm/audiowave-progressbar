@@ -31,6 +31,7 @@
       app:animateExpansion="false"
       app:chunkHeight="16dp"
       app:chunkRadius="1dp"
+      app:touchable="true"
       app:chunkSpacing="1dp"
       app:chunkWidth="3dp"
       app:minChunkHeight="2dp"

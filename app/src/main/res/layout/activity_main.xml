@@ -19,6 +19,7 @@
       android:layout_margin="16dp"
       app:chunkHeight="24dp"
       app:chunkRadius="1dp"
+      app:touchable="false"
       app:chunkSpacing="1dp"
       app:chunkWidth="3dp"
       app:minChunkHeight="2dp"

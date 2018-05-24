@@ -9,5 +9,6 @@
     <attr format="dimension" name="chunkSpacing"/>
     <attr format="float" name="progress"/>
     <attr format="boolean" name="animateExpansion"/>
+    <attr format="boolean" name="touchable"/>
   </declare-styleable>
 </resources>

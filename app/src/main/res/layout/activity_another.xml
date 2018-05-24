@@ -23,6 +23,7 @@
       app:chunkRadius="1dp"
       app:chunkSpacing="1dp"
       app:chunkWidth="3dp"
+      app:touchable="true"
       app:minChunkHeight="2dp"
       app:progress="0.0"
       app:waveColor="@android:color/black"
