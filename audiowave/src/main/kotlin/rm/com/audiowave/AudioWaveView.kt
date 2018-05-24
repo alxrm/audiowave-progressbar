@@ -106,8 +106,9 @@ class AudioWaveView : View {
   var isExpansionAnimated: Boolean = true
 
   var isTouched = false
+    private set
 
-  private val chunksCount: Int
+  val chunksCount: Int
     get() = w / chunkStep
 
   private val chunkStep: Int
