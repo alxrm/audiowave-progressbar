@@ -285,7 +285,7 @@ class AudioWaveView : View {
       chunkRadius = getDimensionPixelSize(R.styleable.AudioWaveView_chunkRadius, chunkRadius)
       isTouchable = getBoolean(R.styleable.AudioWaveView_touchable, isTouchable)
       waveColor = getColor(R.styleable.AudioWaveView_waveColor, waveColor)
-      progress = getFloat(R.styleable.AudioWaveView_progress, progress)
+      progress = getFloat(R.styleable.AudioWaveView_progresss, progress)
       isExpansionAnimated = getBoolean(R.styleable.AudioWaveView_animateExpansion,
           isExpansionAnimated)
       recycle()
