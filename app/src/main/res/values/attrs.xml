@@ -6,6 +6,6 @@
 		<attr name="chunkHeight" format="dimension" />
 		<attr name="minChunkHeight" format="dimension" />
 		<attr name="chunkSpacing" format="dimension" />
-		<attr name="progress" format="float" />
+		<attr name="progresss" format="float" />
 	</declare-styleable>
 </resources>
