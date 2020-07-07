@@ -15,6 +15,7 @@ class AudioWaveView : View {
 
   constructor(context: Context?) : super(context) {
     setWillNotDraw(false)
+
   }
 
   constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
